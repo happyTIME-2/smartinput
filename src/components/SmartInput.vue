@@ -67,10 +67,10 @@
 </template>
 <script>
   import _ from 'lodash';
-  import axios from '../../node_modules/axios';
+  import axios from 'axios';
 
   export default {
-    name: 'SmartTipsInput',
+    name: 'TgSmartInput',
     props: {
       multiple: {
         type: Boolean,
