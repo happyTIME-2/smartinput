@@ -9,6 +9,10 @@
     "lint": "vue-cli-service lint",
     "build-lib": "vue-cli-service build --target lib --name SmartInput ./src/components/index.js"
   },
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/happyTIME-2/smartinput.git"
+  },
   "dependencies": {
     "axios": "^0.19.2",
     "core-js": "^3.6.4",
