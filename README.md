@@ -1,24 +1,8 @@
-# smart-input
+#### Description
+a vue component of smart tips input box.
 
-## Project setup
-```
-npm install
-```
+#### install
+npm install --save-dev tg-smart-input
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+#### import
+import TgSmartInput from "tg-smart-input"
