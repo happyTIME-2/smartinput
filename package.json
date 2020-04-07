@@ -1,6 +1,6 @@
 {
   "name": "tg-smart-input",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "private": false,
   "main": "./dist/SmartInput.umd.min.js",
   "scripts": {

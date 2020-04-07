@@ -1,2 +1,2 @@
-import SmartInput from "./SmartInput.vue";
-export default SmartInput;
+import TgSmartInput from "./TgSmartInput.vue";
+export default TgSmartInput;
