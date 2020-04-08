@@ -1,13 +1,13 @@
 {
   "name": "tg-smart-input",
-  "version": "0.1.5",
+  "version": "0.2.0",
   "private": false,
-  "main": "./dist/TgSmartInput.umd.min.js",
+  "main": "./dist/tg-smart-input.min.js",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "build-lib": "vue-cli-service build --target lib --name TgSmartInput ./src/components/index.js"
+    "build-wc": "vue-cli-service build --target wc --name tg-smart-input ./src/components/TgSmartInput.vue"
   },
   "repository": {
     "type" : "git",
