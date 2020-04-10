@@ -78,8 +78,16 @@
       },
       dataApi: {
         type: String,
-        default: String,
+        default: 'String',
       },
+      memberList: {
+        type: Array,
+        required: false
+      },
+      searchKey: {
+        type: String,
+        required: false,
+      }
     },
     data() {
       return {
@@ -103,13 +111,17 @@
           this.showTips = true;
           this.searchLoading = true;
         }
-        if (Object.prototype.hasOwnProperty.call(this.$attrs, 'member-list')) {
+        if (this.memberList === undefined && this.dataApi === 'String') {
+          console.log('memberList跟dataApi不能同时为空，否则无法进行数据搜索！');
+          return ;
+        }
+        if (this.memberList !== undefined) {
           const pattern = new RegExp(`^${this.inputData}`);
           const pattern1 = new RegExp(this.inputData);
-          this.tipsList = this.$attrs['member-list'].filter((item) => {
+          this.tipsList = this.memberList.filter((item) => {
             if (typeof (item) === 'object' && Object.prototype.hasOwnProperty.call(item, 'name')) {
-              if (Object.prototype.hasOwnProperty.call(this.$attrs, 'key-name')) {
-                this.keyName = this.$attrs['key-name'];
+              if (this.searchKey !== undefined) {
+                this.keyName = this.searchKey;
               }
               if (pattern.test(item[this.keyName])) return item;
             } else if (pattern.test(item)) {
@@ -119,10 +131,10 @@
           }).slice(0,10);
 
           if (this.tipsList.length === 0) {
-            this.tipsList = this.$attrs['member-list'].filter((item) => {
+            this.tipsList = this.memberList.filter((item) => {
               if (typeof (item) === 'object' && Object.prototype.hasOwnProperty.call(item, 'name')) {
-                if (Object.prototype.hasOwnProperty.call(this.$attrs, 'key-name')) {
-                  this.keyName = this.$attrs['key-name'];
+                if (this.searchKey !== undefined) {
+                  this.keyName = this.searchKey;
                 }
                 if (pattern1.test(item[this.keyName])) return item;
               } else if (pattern1.test(item)) {
@@ -138,8 +150,8 @@
         } else {
           axios.get(this.dataApi + this.inputData).then((response) => {
             this.searchLoading = false;
-            if (Object.prototype.hasOwnProperty.call(this.$attrs, 'key-name')) {
-              this.keyName = this.$attrs['key-name'];
+            if (this.searchKey !== undefined) {
+              this.keyName = this.searchKey;
             }
             this.tipsList = response.data.data.members;
             this.showTips = true;
@@ -254,7 +266,7 @@
     box-sizing: border-box;width:100%}
   .editor li{font-size: 16px;padding: 2px 20px;position: relative;white-space: nowrap;
     overflow: hidden;text-overflow: ellipsis;color: #606266;height: 42px;
-    line-height: 42px;cursor: pointer;}
+    line-height: 42px;cursor: pointer;display: block;}
   .editor li:hover{background-color: #f5f7fa;}
   .editor li.active{color: #409eff;background-color: #fff;}
   .editor label{height: 26px;line-height:26px;margin: 0}

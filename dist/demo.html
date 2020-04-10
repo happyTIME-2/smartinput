@@ -1,8 +1,17 @@
 <meta charset="utf-8">
 <title>tg-smart-input demo</title>
 <script src="https://unpkg.com/vue"></script>
-<script src="./tg-smart-input.js"></script>
+<script src="./tg-smart-input.umd.js"></script>
 
 
-<tg-smart-input></tg-smart-input>
+<div id="app">
+  <demo></demo>
+</div>
 
+<script>
+new Vue({
+  components: {
+    demo: tg-smart-input
+  }
+}).$mount('#app')
+</script>
