@@ -1,2 +1,4 @@
 import TgSmartInput from "./TgSmartInput.vue";
-export default TgSmartInput;
+import BaseTag from './BaseTag.vue';
+
+export default {TgSmartInput, BaseTag}
