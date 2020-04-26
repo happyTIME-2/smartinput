@@ -3,19 +3,19 @@
     class="editor"
     @click="inputFocus"
   >
-    <el-tag
+    <base-tag
       v-for="(item,index) in result"
       :key="index"
       class="result-tag"
       size="small"
       type="info"
-      closable
+      closeable
       effect="light"
       @close="handleClose(index)"
     >
       <span v-if="typeof (item) === 'object'">{{ item[keyName] }}</span>
       <span v-else>{{ item }}</span>
-    </el-tag>
+    </base-tag>
     <label>
       <input
         type="text"
@@ -44,18 +44,16 @@
         >
           <template v-if="typeof (item) === 'object'">
             <span class="avatar">
-              <el-image
+              <image
                 :src="'\/\/dcloud.oa.com/Public/Avatar/'+item[keyName]+'.png'"
-                lazy
               />
             </span>
             {{ item[keyName] }}
           </template>
           <template v-else>
             <span class="avatar">
-              <el-image
+              <image
                 :src="'\/\/dcloud.oa.com/Public/Avatar/'+item+'.png'"
-                lazy
               />
             </span>
             {{ item }}
@@ -68,6 +66,7 @@
 <script>
   import _ from 'lodash';
   import axios from 'axios';
+  import BaseTag from './BaseTag';
 
   export default {
     name: 'TgSmartInput',
@@ -231,6 +230,9 @@
           this.$refs.input.focus();
         });
       },
+    },
+    components: {
+      BaseTag,
     },
     watch: {
       inputData(newVal) {
