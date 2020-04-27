@@ -40,7 +40,7 @@ export default {
       multiple: true,
       dataApi: 'http://tgtest.local/members/members?q=',
       keyName: 'zhongwen',
-      //members: [{"name":"john","zhongwen": "小强"},{"name":"allanglwang","zhongwen": "老王"},{"name":"kaireewu","zhongwen": "老吴"}],
+      //members: [{"name":"john","zhongwen": "小强"},{"name":"allan","zhongwen": "老王"},{"name":"krwakg","zhongwen": "老吴"}],
     }
   },
   components: {
