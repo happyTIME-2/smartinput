@@ -89,6 +89,10 @@
         type: String,
         default: 'name',
       },
+      canDeleteOnlyOne: {
+        type: Boolean,
+        default: true,
+      },
       value: {
         type: Array,
         default() {
@@ -111,6 +115,9 @@
     },
     methods: {
       handleClose(index) {
+        if (!this.canDeleteOnlyOne && this.result.length === 1) {
+          return;
+        }
         this.result.splice(index, 1);
       },
       searchMember() {
@@ -204,6 +211,9 @@
         }
       },
       deleteOne() {
+        if (!this.canDeleteOnlyOne && this.result.length === 1) {
+          return;
+        }
         if (this.inputData === '') this.result.splice(this.result.length - 1);
       },
       clickSelect(index) {
