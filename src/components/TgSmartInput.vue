@@ -44,7 +44,7 @@
         >
           <template v-if="typeof (item) === 'object'">
             <span class="avatar">
-              <image
+              <img
                 :src="'\/\/dcloud.oa.com/Public/Avatar/'+item[keyName]+'.png'"
               />
             </span>
@@ -52,7 +52,7 @@
           </template>
           <template v-else>
             <span class="avatar">
-              <image
+              <img
                 :src="'\/\/dcloud.oa.com/Public/Avatar/'+item+'.png'"
               />
             </span>
@@ -81,16 +81,24 @@
       },
       memberList: {
         type: Array,
-        required: false
+        default() {
+          return [];
+        },
       },
       searchKey: {
         type: String,
-        required: false,
-      }
+        default: 'name',
+      },
+      value: {
+        type: Array,
+        default() {
+          return [];
+        },
+      },
     },
     data() {
       return {
-        result: [], // 多个最终的输入结果
+        result: this.value || [], // 多个最终的输入结果
         tipsList: [], // 提示结果，通过后端api搜索得到，最多10条
         inputData: '', // 输入框当前输入值，用于api搜索的参数值
         showTips: false, // 当搜索返回结果的时候，tipsList长度不为0时，显示tipsList
@@ -98,7 +106,7 @@
         shouldHiddenTips: false, // 控制input控件blur的时候是否可以隐藏tipsList
         focusIndex: 0, // 当前选中index
         keyName: 'name', // 如果搜索的结果数据组项为object，可以通过传入的keyName值来确定tipsList对应对象的那个key-value值
-        canDelete: false, // 控制退格事件是否执行delete事件，进行选中对象删除
+        canDelete: true, // 控制退格事件是否执行delete事件，进行选中对象删除
       };
     },
     methods: {
@@ -110,18 +118,15 @@
           this.showTips = true;
           this.searchLoading = true;
         }
-        if (this.memberList === undefined && this.dataApi === 'String') {
+        if (this.memberList.length === 0 && this.dataApi === 'String') {
           console.log('memberList跟dataApi不能同时为空，否则无法进行数据搜索！');
           return ;
         }
-        if (this.memberList !== undefined) {
+        if (this.memberList.length !== 0) {
           const pattern = new RegExp(`^${this.inputData}`);
           const pattern1 = new RegExp(this.inputData);
           this.tipsList = this.memberList.filter((item) => {
             if (typeof (item) === 'object' && Object.prototype.hasOwnProperty.call(item, 'name')) {
-              if (this.searchKey !== undefined) {
-                this.keyName = this.searchKey;
-              }
               if (pattern.test(item[this.keyName])) return item;
             } else if (pattern.test(item)) {
               return item;
@@ -132,9 +137,6 @@
           if (this.tipsList.length === 0) {
             this.tipsList = this.memberList.filter((item) => {
               if (typeof (item) === 'object' && Object.prototype.hasOwnProperty.call(item, 'name')) {
-                if (this.searchKey !== undefined) {
-                  this.keyName = this.searchKey;
-                }
                 if (pattern1.test(item[this.keyName])) return item;
               } else if (pattern1.test(item)) {
                 return item;
@@ -149,9 +151,6 @@
         } else {
           axios.get(this.dataApi + this.inputData).then((response) => {
             this.searchLoading = false;
-            if (this.searchKey !== undefined) {
-              this.keyName = this.searchKey;
-            }
             this.tipsList = response.data.data.members;
             this.showTips = true;
             if (this.result.length > 0) this.focusIndex = 0;
@@ -159,9 +158,6 @@
             // eslint-disable-next-line no-console
           }).catch((e) => { console.log(e); });
         }
-      },
-      selectMember(index) {
-        this.result.push(this.tipsList[index]);
       },
       keyEvent(e) {
         switch (e.keyCode) {
@@ -189,20 +185,22 @@
       selectOne() {
         if (typeof (this.tipsList[0]) === 'object') {
           // eslint-disable-next-line no-var,vars-on-top
-          var noResult = this.tipsList[0].name.indexOf('no result！') === -1;
+          var hasSearchResult = this.tipsList[0].name.indexOf('no result！') === -1;
         } else {
           // eslint-disable-next-line block-scoped-var
-          noResult = this.tipsList[0].indexOf('no result！') === -1;
+          hasSearchResult = this.tipsList[0].indexOf('no result！') === -1;
         }
 
         // eslint-disable-next-line block-scoped-var,max-len
-        if (this.multiple && this.result.indexOf(this.tipsList[this.focusIndex]) === -1 && noResult) {
+        if (this.multiple && this.result.indexOf(this.tipsList[this.focusIndex]) === -1 && hasSearchResult) {
           this.result.push(this.tipsList[this.focusIndex]);
+          this.inputData = '';
         }
 
         // eslint-disable-next-line block-scoped-var,max-len
-        if (!this.multiple && this.result.indexOf(this.tipsList[this.focusIndex]) === -1 && noResult) {
+        if (!this.multiple && this.result.indexOf(this.tipsList[this.focusIndex]) === -1 && hasSearchResult) {
           this.result.splice(0, 1, this.tipsList[this.focusIndex]);
+          this.inputData = '';
         }
       },
       deleteOne() {
@@ -220,8 +218,9 @@
         if (this.shouldHiddenTips) this.showTips = false;
       },
       focusEvent() {
-        if (this.tipsList.length !== 0) this.showTips = true;
+        if (this.tipsList.length !== 0 && this.inputData !== '') this.showTips = true;
         this.shouldHiddenTips = true;
+        this.inputData = '';
       },
       mousedownEvent() {
         this.shouldHiddenTips = false;
@@ -248,8 +247,15 @@
         }
         this.debouncedSearchMember();
       },
+      value(newVal) {
+        this.result = newVal;
+      },
+      result(newVal) {
+        this.$emit('input', newVal);
+      },
     },
     created() {
+      this.keyName = this.searchKey;
       this.debouncedSearchMember = _.debounce(this.searchMember, 500);
     },
   };
